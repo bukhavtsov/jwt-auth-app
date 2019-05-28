@@ -1,0 +1,332 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "gateway-server/pkg/proto/auth.proto",
+    "version": "version not set"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/developers": {
+      "get": {
+        "operationId": "ReadAllDevelopers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/serverProtoReadAllDevelopersResponse"
+            }
+          }
+        },
+        "tags": [
+          "RestApp"
+        ]
+      },
+      "post": {
+        "operationId": "CreateDeveloper",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/serverProtoCreateDeveloperResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/serverProtoCreateDeveloperRequest"
+            }
+          }
+        ],
+        "tags": [
+          "RestApp"
+        ]
+      }
+    },
+    "/api/v1/developers/{id}": {
+      "get": {
+        "operationId": "ReadDeveloper",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/serverProtoReadDeveloperResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "RestApp"
+        ]
+      },
+      "delete": {
+        "operationId": "DeleteDeveloper",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/serverProtoDeleteDeveloperResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "RestApp"
+        ]
+      },
+      "put": {
+        "operationId": "UpdateDeveloper",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/serverProtoUpdateDeveloperResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/serverProtoUpdateDeveloperRequest"
+            }
+          }
+        ],
+        "tags": [
+          "RestApp"
+        ]
+      }
+    },
+    "/api/v1/signin/{login}/{password}": {
+      "get": {
+        "operationId": "SignIn",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/serverProtoSignInResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "login",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "RestApp"
+        ]
+      }
+    },
+    "/api/v1/signup": {
+      "post": {
+        "operationId": "SignUp",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/serverProtoSignUpResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/serverProtoSignUpRequest"
+            }
+          }
+        ],
+        "tags": [
+          "RestApp"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "serverProtoCreateDeveloperRequest": {
+      "type": "object",
+      "properties": {
+        "developer": {
+          "$ref": "#/definitions/serverProtoDeveloper"
+        }
+      }
+    },
+    "serverProtoCreateDeveloperResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "serverProtoDeleteDeveloperResponse": {
+      "type": "object"
+    },
+    "serverProtoDeveloper": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "age": {
+          "type": "string",
+          "format": "int64"
+        },
+        "primarySkill": {
+          "type": "string"
+        }
+      }
+    },
+    "serverProtoReadAllDevelopersResponse": {
+      "type": "object",
+      "properties": {
+        "developers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/serverProtoDeveloper"
+          }
+        }
+      }
+    },
+    "serverProtoReadDeveloperResponse": {
+      "type": "object",
+      "properties": {
+        "developer": {
+          "$ref": "#/definitions/serverProtoDeveloper"
+        }
+      }
+    },
+    "serverProtoSignInResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "serverProtoSignUpRequest": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/serverProtoUser"
+        }
+      }
+    },
+    "serverProtoSignUpResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "serverProtoUpdateDeveloperRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "developer": {
+          "$ref": "#/definitions/serverProtoDeveloper"
+        }
+      }
+    },
+    "serverProtoUpdateDeveloperResponse": {
+      "type": "object",
+      "properties": {
+        "developer": {
+          "$ref": "#/definitions/serverProtoDeveloper"
+        }
+      }
+    },
+    "serverProtoUser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "login": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        },
+        "peopleNumber": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    }
+  }
+}

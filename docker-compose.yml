@@ -1,0 +1,22 @@
+version: '3'
+services:
+  gateway:
+    image: "gateway-jwt"
+    ports:
+      - '8081:8081'
+  server:
+    image: "server-jwt"
+    ports:
+      - '2020:2020'
+  db:
+    image: "psql-jwt"
+    networks:
+      - mynet
+  rpc:
+    image: "rpc-jwt"  #doesn't work
+    ports:
+      - '8080:8080'
+    networks:
+      - mynet
+networks:
+  mynet:
