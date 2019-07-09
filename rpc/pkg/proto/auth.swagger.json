@@ -1,0 +1,128 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "rpc/pkg/proto/auth.proto",
+    "version": "version not set"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {},
+  "definitions": {
+    "authProtoCreateDeveloperResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "authProtoDeleteDeveloperResponse": {
+      "type": "object"
+    },
+    "authProtoDeveloper": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "age": {
+          "type": "string",
+          "format": "int64"
+        },
+        "primarySkill": {
+          "type": "string"
+        }
+      }
+    },
+    "authProtoReadAllDevelopersResponse": {
+      "type": "object",
+      "properties": {
+        "developers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/authProtoDeveloper"
+          }
+        }
+      }
+    },
+    "authProtoReadDeveloperResponse": {
+      "type": "object",
+      "properties": {
+        "developer": {
+          "$ref": "#/definitions/authProtoDeveloper"
+        }
+      }
+    },
+    "authProtoSignInResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "authProtoSignUpResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "authProtoUpdateDeveloperResponse": {
+      "type": "object",
+      "properties": {
+        "developer": {
+          "$ref": "#/definitions/authProtoDeveloper"
+        }
+      }
+    },
+    "authProtoUser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "login": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        },
+        "peopleNumber": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,58 @@
+version: '3.5'
+services:
+  db-rpc:
+    image: "db-rpc"
+    networks:
+      - jwt-auth-app-network
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=postgres
+    ports:
+      - 1002:5432
+    container_name: db-rpc
+  gateway:
+    image: "gateway"
+    ports:
+      - '8081:8081'
+    links:
+      - svc-gateway
+    networks:
+      - jwt-auth-app-network
+    environment:
+      - listen=0.0.0.0:8081
+      - svc-gateway=svc-gateway:2020
+    container_name: gateway
+  svc-gateway:
+    image: "svc-gateway"
+    ports:
+      - '5422:2020'
+    links:
+      - rpc
+    networks:
+      - jwt-auth-app-network
+    environment:
+      - listen=0.0.0.0:2020
+      - rpc=rpc:8080
+    container_name: svc-gateway
+  rpc:
+    image: "rpc"  #doesn't work
+    ports:
+      - '4213:8080'
+    networks:
+      - jwt-auth-app-network
+    links:
+      - db-rpc
+    environment:
+      - database.address=postgres
+      - database.port=5432
+      - database.name=postgres
+      - database.user=postgres
+      - database.password=root
+      - database.ssl=disable
+      - database.host=db-rpc
+      - listen=0.0.0.0:8080
+    container_name: rpc
+networks:
+  jwt-auth-app-network:
+    name: jwt-auth-app-dev
