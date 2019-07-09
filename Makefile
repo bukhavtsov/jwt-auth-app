@@ -1,10 +1,10 @@
 CUR_DIR := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
 BINDIR = $(CUR_DIR)/bin
 DBDIR = $(CUR_DIR)/devops/db
-GATEWAY_IMAGE = gateway-jwt
-SERVER_IMAGE = server-jwt
-RPC_IMAGE = rpc-jwt
-DB_IMAGE = psql-jwt
+GATEWAY_IMAGE = gateway
+SVC_GATEWAY_IMAGE = svc-gateway
+RPC_IMAGE = rpc
+DB_IMAGE = db-rpc
 gen:
 	protoc -I /usr/local/include -I. \
 	-I $(GOPATH)/src \
@@ -12,7 +12,7 @@ gen:
 	--go_out=plugins=grpc:. \
 	--grpc-gateway_out=logtostderr=true:. \
 	--swagger_out=logtostderr=true:. \
-	gateway-server/pkg/proto/auth.proto
+	gateway/pkg/proto/auth.proto
 
 	protoc -I /usr/local/include -I. \
     	-I $(GOPATH)/src \
@@ -23,19 +23,24 @@ gen:
     	rpc/pkg/proto/auth.proto
 
 build:
-	go build -o bin/rpc cmd/rpc/main.go
-	go build -o bin/gateway cmd/gateway-server/gateway/main.go
-	go build -o bin/server cmd/gateway-server/server/main.go
-up:
-	cp cmd/gateway-server/gateway/Dockerfile $(BINDIR)
+	go build -o bin/rpc rpc/cmd/rpc/main.go
+	go build -o bin/gateway gateway/cmd/gateway/main.go
+	go build -o bin/svc-gateway gateway/cmd/svc-gateway/main.go
+image:
+	cp gateway/cmd/gateway/Dockerfile $(BINDIR)
 	docker build -t $(GATEWAY_IMAGE) $(BINDIR)
 	rm $(BINDIR)/Dockerfile
-	cp cmd/gateway-server/server/Dockerfile $(BINDIR)
-	docker build -t $(SERVER_IMAGE) $(BINDIR)
+	cp gateway/cmd/svc-gateway/Dockerfile $(BINDIR)
+	docker build -t $(SVC_GATEWAY_IMAGE) $(BINDIR)
 	rm $(BINDIR)/Dockerfile
-	cp cmd/rpc/Dockerfile $(BINDIR)
+	cp rpc/cmd/rpc/Dockerfile $(BINDIR)
 	docker build -t $(RPC_IMAGE) $(BINDIR)
 	rm $(BINDIR)/Dockerfile
 	docker build -t $(DB_IMAGE) $(DBDIR)
-compose:
+up:
 	docker-compose up
+
+#down:
+#	docker kill $(docker ps -a -q)
+#	docker rm $(docker ps -a -q)
+#	docker rmi $(docker images -a -q)
