@@ -7,9 +7,9 @@ import (
 	"log"
 )
 
-func GetConnection(engine, username, password, name string) *gorm.DB {
-	dsn := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", username, password, name)
-	connection, err := gorm.Open(engine, dsn)
+func GetConnection(host, port, user, dbname, password, sslmode string) *gorm.DB {
+	args := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s", host, port, user, dbname, password, sslmode)
+	connection, err := gorm.Open("postgres", args)
 	if err != nil {
 		log.Fatalln(err)
 	}
