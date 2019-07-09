@@ -2,21 +2,27 @@ package main
 
 import (
 	"fmt"
-	pb "github.com/bukhavtsov/jwt-auth-app/gateway-server/pkg/proto"
+	pb "github.com/bukhavtsov/jwt-auth-app/gateway/pkg/proto"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"log"
 	"net/http"
+	"os"
 )
 
-const (
-	proxyAddr   = ":8081"
-	serviceAddr = "127.0.0.1:2020"
-)
+var addr string
+var svcGateway string
 
-//TODO: unary interceptor
+func init() {
+	addr = os.Getenv("listen")
+	svcGateway = os.Getenv("svc-gateway")
+}
+
+// TODO: unary interceptor
 func HTTPProxy(proxyAddr string, serviceAddr string) {
+	log.Println("gateway work in:", addr)
+	log.Println("svc-gateway work in:", svcGateway)
 	connGRPC, err := grpc.Dial(serviceAddr, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalln("failed to connect to GRPC ", err)
@@ -34,5 +40,5 @@ func HTTPProxy(proxyAddr string, serviceAddr string) {
 }
 
 func main() {
-	HTTPProxy(proxyAddr, serviceAddr)
+	HTTPProxy(addr, svcGateway)
 }

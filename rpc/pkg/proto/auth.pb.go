@@ -25,13 +25,13 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
 type User struct {
-	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Login                string   `protobuf:"bytes,2,opt,name=login,proto3" json:"login,omitempty"`
-	Email                string   `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
-	Password             string   `protobuf:"bytes,4,opt,name=password,proto3" json:"password,omitempty"`
-	Role                 string   `protobuf:"bytes,5,opt,name=role,proto3" json:"role,omitempty"`
-	RefreshToken         string   `protobuf:"bytes,6,opt,name=refreshToken,proto3" json:"refreshToken,omitempty"`
-	PeopleNumber         int64    `protobuf:"varint,7,opt,name=peopleNumber,proto3" json:"peopleNumber,omitempty"`
+	Id                   int64    `protobuf:"varint,1,opt,name=id" json:"id,omitempty"`
+	Login                string   `protobuf:"bytes,2,opt,name=login" json:"login,omitempty"`
+	Email                string   `protobuf:"bytes,3,opt,name=email" json:"email,omitempty"`
+	Password             string   `protobuf:"bytes,4,opt,name=password" json:"password,omitempty"`
+	Role                 string   `protobuf:"bytes,5,opt,name=role" json:"role,omitempty"`
+	RefreshToken         string   `protobuf:"bytes,6,opt,name=refreshToken" json:"refreshToken,omitempty"`
+	PeopleNumber         int64    `protobuf:"varint,7,opt,name=peopleNumber" json:"peopleNumber,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -41,7 +41,7 @@ func (m *User) Reset()         { *m = User{} }
 func (m *User) String() string { return proto.CompactTextString(m) }
 func (*User) ProtoMessage()    {}
 func (*User) Descriptor() ([]byte, []int) {
-	return fileDescriptor_auth_5341eea3177600fa, []int{0}
+	return fileDescriptor_auth_d04ca531c53671f3, []int{0}
 }
 func (m *User) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_User.Unmarshal(m, b)
@@ -111,10 +111,10 @@ func (m *User) GetPeopleNumber() int64 {
 }
 
 type Developer struct {
-	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name                 string   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Age                  int64    `protobuf:"varint,3,opt,name=age,proto3" json:"age,omitempty"`
-	PrimarySkill         string   `protobuf:"bytes,4,opt,name=primarySkill,proto3" json:"primarySkill,omitempty"`
+	Id                   int64    `protobuf:"varint,1,opt,name=id" json:"id,omitempty"`
+	Name                 string   `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
+	Age                  int64    `protobuf:"varint,3,opt,name=age" json:"age,omitempty"`
+	PrimarySkill         string   `protobuf:"bytes,4,opt,name=primarySkill" json:"primarySkill,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -124,7 +124,7 @@ func (m *Developer) Reset()         { *m = Developer{} }
 func (m *Developer) String() string { return proto.CompactTextString(m) }
 func (*Developer) ProtoMessage()    {}
 func (*Developer) Descriptor() ([]byte, []int) {
-	return fileDescriptor_auth_5341eea3177600fa, []int{1}
+	return fileDescriptor_auth_d04ca531c53671f3, []int{1}
 }
 func (m *Developer) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Developer.Unmarshal(m, b)
@@ -173,7 +173,7 @@ func (m *Developer) GetPrimarySkill() string {
 }
 
 type CreateDeveloperRequest struct {
-	Developer            *Developer `protobuf:"bytes,1,opt,name=developer,proto3" json:"developer,omitempty"`
+	Developer            *Developer `protobuf:"bytes,1,opt,name=developer" json:"developer,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
 	XXX_unrecognized     []byte     `json:"-"`
 	XXX_sizecache        int32      `json:"-"`
@@ -183,7 +183,7 @@ func (m *CreateDeveloperRequest) Reset()         { *m = CreateDeveloperRequest{}
 func (m *CreateDeveloperRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateDeveloperRequest) ProtoMessage()    {}
 func (*CreateDeveloperRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_auth_5341eea3177600fa, []int{2}
+	return fileDescriptor_auth_d04ca531c53671f3, []int{2}
 }
 func (m *CreateDeveloperRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateDeveloperRequest.Unmarshal(m, b)
@@ -211,7 +211,7 @@ func (m *CreateDeveloperRequest) GetDeveloper() *Developer {
 }
 
 type CreateDeveloperResponse struct {
-	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id                   int64    `protobuf:"varint,1,opt,name=id" json:"id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -221,7 +221,7 @@ func (m *CreateDeveloperResponse) Reset()         { *m = CreateDeveloperResponse
 func (m *CreateDeveloperResponse) String() string { return proto.CompactTextString(m) }
 func (*CreateDeveloperResponse) ProtoMessage()    {}
 func (*CreateDeveloperResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_auth_5341eea3177600fa, []int{3}
+	return fileDescriptor_auth_d04ca531c53671f3, []int{3}
 }
 func (m *CreateDeveloperResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateDeveloperResponse.Unmarshal(m, b)
@@ -249,7 +249,7 @@ func (m *CreateDeveloperResponse) GetId() int64 {
 }
 
 type ReadDeveloperRequest struct {
-	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id                   int64    `protobuf:"varint,1,opt,name=id" json:"id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -259,7 +259,7 @@ func (m *ReadDeveloperRequest) Reset()         { *m = ReadDeveloperRequest{} }
 func (m *ReadDeveloperRequest) String() string { return proto.CompactTextString(m) }
 func (*ReadDeveloperRequest) ProtoMessage()    {}
 func (*ReadDeveloperRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_auth_5341eea3177600fa, []int{4}
+	return fileDescriptor_auth_d04ca531c53671f3, []int{4}
 }
 func (m *ReadDeveloperRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ReadDeveloperRequest.Unmarshal(m, b)
@@ -287,7 +287,7 @@ func (m *ReadDeveloperRequest) GetId() int64 {
 }
 
 type ReadDeveloperResponse struct {
-	Developer            *Developer `protobuf:"bytes,1,opt,name=developer,proto3" json:"developer,omitempty"`
+	Developer            *Developer `protobuf:"bytes,1,opt,name=developer" json:"developer,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
 	XXX_unrecognized     []byte     `json:"-"`
 	XXX_sizecache        int32      `json:"-"`
@@ -297,7 +297,7 @@ func (m *ReadDeveloperResponse) Reset()         { *m = ReadDeveloperResponse{} }
 func (m *ReadDeveloperResponse) String() string { return proto.CompactTextString(m) }
 func (*ReadDeveloperResponse) ProtoMessage()    {}
 func (*ReadDeveloperResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_auth_5341eea3177600fa, []int{5}
+	return fileDescriptor_auth_d04ca531c53671f3, []int{5}
 }
 func (m *ReadDeveloperResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ReadDeveloperResponse.Unmarshal(m, b)
@@ -325,8 +325,8 @@ func (m *ReadDeveloperResponse) GetDeveloper() *Developer {
 }
 
 type UpdateDeveloperRequest struct {
-	Id                   int64      `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Developer            *Developer `protobuf:"bytes,2,opt,name=developer,proto3" json:"developer,omitempty"`
+	Id                   int64      `protobuf:"varint,1,opt,name=id" json:"id,omitempty"`
+	Developer            *Developer `protobuf:"bytes,2,opt,name=developer" json:"developer,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
 	XXX_unrecognized     []byte     `json:"-"`
 	XXX_sizecache        int32      `json:"-"`
@@ -336,7 +336,7 @@ func (m *UpdateDeveloperRequest) Reset()         { *m = UpdateDeveloperRequest{}
 func (m *UpdateDeveloperRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateDeveloperRequest) ProtoMessage()    {}
 func (*UpdateDeveloperRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_auth_5341eea3177600fa, []int{6}
+	return fileDescriptor_auth_d04ca531c53671f3, []int{6}
 }
 func (m *UpdateDeveloperRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateDeveloperRequest.Unmarshal(m, b)
@@ -371,7 +371,7 @@ func (m *UpdateDeveloperRequest) GetDeveloper() *Developer {
 }
 
 type UpdateDeveloperResponse struct {
-	Developer            *Developer `protobuf:"bytes,1,opt,name=developer,proto3" json:"developer,omitempty"`
+	Developer            *Developer `protobuf:"bytes,1,opt,name=developer" json:"developer,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
 	XXX_unrecognized     []byte     `json:"-"`
 	XXX_sizecache        int32      `json:"-"`
@@ -381,7 +381,7 @@ func (m *UpdateDeveloperResponse) Reset()         { *m = UpdateDeveloperResponse
 func (m *UpdateDeveloperResponse) String() string { return proto.CompactTextString(m) }
 func (*UpdateDeveloperResponse) ProtoMessage()    {}
 func (*UpdateDeveloperResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_auth_5341eea3177600fa, []int{7}
+	return fileDescriptor_auth_d04ca531c53671f3, []int{7}
 }
 func (m *UpdateDeveloperResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateDeveloperResponse.Unmarshal(m, b)
@@ -409,7 +409,7 @@ func (m *UpdateDeveloperResponse) GetDeveloper() *Developer {
 }
 
 type DeleteDeveloperRequest struct {
-	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id                   int64    `protobuf:"varint,1,opt,name=id" json:"id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -419,7 +419,7 @@ func (m *DeleteDeveloperRequest) Reset()         { *m = DeleteDeveloperRequest{}
 func (m *DeleteDeveloperRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteDeveloperRequest) ProtoMessage()    {}
 func (*DeleteDeveloperRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_auth_5341eea3177600fa, []int{8}
+	return fileDescriptor_auth_d04ca531c53671f3, []int{8}
 }
 func (m *DeleteDeveloperRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteDeveloperRequest.Unmarshal(m, b)
@@ -456,7 +456,7 @@ func (m *DeleteDeveloperResponse) Reset()         { *m = DeleteDeveloperResponse
 func (m *DeleteDeveloperResponse) String() string { return proto.CompactTextString(m) }
 func (*DeleteDeveloperResponse) ProtoMessage()    {}
 func (*DeleteDeveloperResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_auth_5341eea3177600fa, []int{9}
+	return fileDescriptor_auth_d04ca531c53671f3, []int{9}
 }
 func (m *DeleteDeveloperResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteDeveloperResponse.Unmarshal(m, b)
@@ -486,7 +486,7 @@ func (m *ReadAllDevelopersRequest) Reset()         { *m = ReadAllDevelopersReque
 func (m *ReadAllDevelopersRequest) String() string { return proto.CompactTextString(m) }
 func (*ReadAllDevelopersRequest) ProtoMessage()    {}
 func (*ReadAllDevelopersRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_auth_5341eea3177600fa, []int{10}
+	return fileDescriptor_auth_d04ca531c53671f3, []int{10}
 }
 func (m *ReadAllDevelopersRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ReadAllDevelopersRequest.Unmarshal(m, b)
@@ -507,7 +507,7 @@ func (m *ReadAllDevelopersRequest) XXX_DiscardUnknown() {
 var xxx_messageInfo_ReadAllDevelopersRequest proto.InternalMessageInfo
 
 type ReadAllDevelopersResponse struct {
-	Developers           []*Developer `protobuf:"bytes,1,rep,name=developers,proto3" json:"developers,omitempty"`
+	Developers           []*Developer `protobuf:"bytes,1,rep,name=developers" json:"developers,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
 	XXX_unrecognized     []byte       `json:"-"`
 	XXX_sizecache        int32        `json:"-"`
@@ -517,7 +517,7 @@ func (m *ReadAllDevelopersResponse) Reset()         { *m = ReadAllDevelopersResp
 func (m *ReadAllDevelopersResponse) String() string { return proto.CompactTextString(m) }
 func (*ReadAllDevelopersResponse) ProtoMessage()    {}
 func (*ReadAllDevelopersResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_auth_5341eea3177600fa, []int{11}
+	return fileDescriptor_auth_d04ca531c53671f3, []int{11}
 }
 func (m *ReadAllDevelopersResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ReadAllDevelopersResponse.Unmarshal(m, b)
@@ -545,8 +545,8 @@ func (m *ReadAllDevelopersResponse) GetDevelopers() []*Developer {
 }
 
 type SignInRequest struct {
-	Login                string   `protobuf:"bytes,1,opt,name=login,proto3" json:"login,omitempty"`
-	Password             string   `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	Login                string   `protobuf:"bytes,1,opt,name=login" json:"login,omitempty"`
+	Password             string   `protobuf:"bytes,2,opt,name=password" json:"password,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -556,7 +556,7 @@ func (m *SignInRequest) Reset()         { *m = SignInRequest{} }
 func (m *SignInRequest) String() string { return proto.CompactTextString(m) }
 func (*SignInRequest) ProtoMessage()    {}
 func (*SignInRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_auth_5341eea3177600fa, []int{12}
+	return fileDescriptor_auth_d04ca531c53671f3, []int{12}
 }
 func (m *SignInRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SignInRequest.Unmarshal(m, b)
@@ -591,8 +591,8 @@ func (m *SignInRequest) GetPassword() string {
 }
 
 type SignInResponse struct {
-	AccessToken          string   `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`
-	RefreshToken         string   `protobuf:"bytes,2,opt,name=refreshToken,proto3" json:"refreshToken,omitempty"`
+	AccessToken          string   `protobuf:"bytes,1,opt,name=accessToken" json:"accessToken,omitempty"`
+	RefreshToken         string   `protobuf:"bytes,2,opt,name=refreshToken" json:"refreshToken,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -602,7 +602,7 @@ func (m *SignInResponse) Reset()         { *m = SignInResponse{} }
 func (m *SignInResponse) String() string { return proto.CompactTextString(m) }
 func (*SignInResponse) ProtoMessage()    {}
 func (*SignInResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_auth_5341eea3177600fa, []int{13}
+	return fileDescriptor_auth_d04ca531c53671f3, []int{13}
 }
 func (m *SignInResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SignInResponse.Unmarshal(m, b)
@@ -637,7 +637,7 @@ func (m *SignInResponse) GetRefreshToken() string {
 }
 
 type SignUpRequest struct {
-	User                 *User    `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	User                 *User    `protobuf:"bytes,1,opt,name=user" json:"user,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -647,7 +647,7 @@ func (m *SignUpRequest) Reset()         { *m = SignUpRequest{} }
 func (m *SignUpRequest) String() string { return proto.CompactTextString(m) }
 func (*SignUpRequest) ProtoMessage()    {}
 func (*SignUpRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_auth_5341eea3177600fa, []int{14}
+	return fileDescriptor_auth_d04ca531c53671f3, []int{14}
 }
 func (m *SignUpRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SignUpRequest.Unmarshal(m, b)
@@ -675,8 +675,8 @@ func (m *SignUpRequest) GetUser() *User {
 }
 
 type SignUpResponse struct {
-	AccessToken          string   `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`
-	RefreshToken         string   `protobuf:"bytes,2,opt,name=refreshToken,proto3" json:"refreshToken,omitempty"`
+	AccessToken          string   `protobuf:"bytes,1,opt,name=accessToken" json:"accessToken,omitempty"`
+	RefreshToken         string   `protobuf:"bytes,2,opt,name=refreshToken" json:"refreshToken,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -686,7 +686,7 @@ func (m *SignUpResponse) Reset()         { *m = SignUpResponse{} }
 func (m *SignUpResponse) String() string { return proto.CompactTextString(m) }
 func (*SignUpResponse) ProtoMessage()    {}
 func (*SignUpResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_auth_5341eea3177600fa, []int{15}
+	return fileDescriptor_auth_d04ca531c53671f3, []int{15}
 }
 func (m *SignUpResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SignUpResponse.Unmarshal(m, b)
@@ -747,9 +747,8 @@ var _ grpc.ClientConn
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion4
 
-// AuthClient is the client API for Auth service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+// Client API for Auth service
+
 type AuthClient interface {
 	ReadAllDevelopers(ctx context.Context, in *ReadAllDevelopersRequest, opts ...grpc.CallOption) (*ReadAllDevelopersResponse, error)
 	CreateDeveloper(ctx context.Context, in *CreateDeveloperRequest, opts ...grpc.CallOption) (*CreateDeveloperResponse, error)
@@ -770,7 +769,7 @@ func NewAuthClient(cc *grpc.ClientConn) AuthClient {
 
 func (c *authClient) ReadAllDevelopers(ctx context.Context, in *ReadAllDevelopersRequest, opts ...grpc.CallOption) (*ReadAllDevelopersResponse, error) {
 	out := new(ReadAllDevelopersResponse)
-	err := c.cc.Invoke(ctx, "/authProto.Auth/ReadAllDevelopers", in, out, opts...)
+	err := grpc.Invoke(ctx, "/authProto.Auth/ReadAllDevelopers", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -779,7 +778,7 @@ func (c *authClient) ReadAllDevelopers(ctx context.Context, in *ReadAllDeveloper
 
 func (c *authClient) CreateDeveloper(ctx context.Context, in *CreateDeveloperRequest, opts ...grpc.CallOption) (*CreateDeveloperResponse, error) {
 	out := new(CreateDeveloperResponse)
-	err := c.cc.Invoke(ctx, "/authProto.Auth/CreateDeveloper", in, out, opts...)
+	err := grpc.Invoke(ctx, "/authProto.Auth/CreateDeveloper", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -788,7 +787,7 @@ func (c *authClient) CreateDeveloper(ctx context.Context, in *CreateDeveloperReq
 
 func (c *authClient) ReadDeveloper(ctx context.Context, in *ReadDeveloperRequest, opts ...grpc.CallOption) (*ReadDeveloperResponse, error) {
 	out := new(ReadDeveloperResponse)
-	err := c.cc.Invoke(ctx, "/authProto.Auth/ReadDeveloper", in, out, opts...)
+	err := grpc.Invoke(ctx, "/authProto.Auth/ReadDeveloper", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -797,7 +796,7 @@ func (c *authClient) ReadDeveloper(ctx context.Context, in *ReadDeveloperRequest
 
 func (c *authClient) UpdateDeveloper(ctx context.Context, in *UpdateDeveloperRequest, opts ...grpc.CallOption) (*UpdateDeveloperResponse, error) {
 	out := new(UpdateDeveloperResponse)
-	err := c.cc.Invoke(ctx, "/authProto.Auth/UpdateDeveloper", in, out, opts...)
+	err := grpc.Invoke(ctx, "/authProto.Auth/UpdateDeveloper", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -806,7 +805,7 @@ func (c *authClient) UpdateDeveloper(ctx context.Context, in *UpdateDeveloperReq
 
 func (c *authClient) DeleteDeveloper(ctx context.Context, in *DeleteDeveloperRequest, opts ...grpc.CallOption) (*DeleteDeveloperResponse, error) {
 	out := new(DeleteDeveloperResponse)
-	err := c.cc.Invoke(ctx, "/authProto.Auth/DeleteDeveloper", in, out, opts...)
+	err := grpc.Invoke(ctx, "/authProto.Auth/DeleteDeveloper", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -815,7 +814,7 @@ func (c *authClient) DeleteDeveloper(ctx context.Context, in *DeleteDeveloperReq
 
 func (c *authClient) SignIn(ctx context.Context, in *SignInRequest, opts ...grpc.CallOption) (*SignInResponse, error) {
 	out := new(SignInResponse)
-	err := c.cc.Invoke(ctx, "/authProto.Auth/SignIn", in, out, opts...)
+	err := grpc.Invoke(ctx, "/authProto.Auth/SignIn", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -824,14 +823,15 @@ func (c *authClient) SignIn(ctx context.Context, in *SignInRequest, opts ...grpc
 
 func (c *authClient) SignUp(ctx context.Context, in *SignUpRequest, opts ...grpc.CallOption) (*SignUpResponse, error) {
 	out := new(SignUpResponse)
-	err := c.cc.Invoke(ctx, "/authProto.Auth/SignUp", in, out, opts...)
+	err := grpc.Invoke(ctx, "/authProto.Auth/SignUp", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// AuthServer is the server API for Auth service.
+// Server API for Auth service
+
 type AuthServer interface {
 	ReadAllDevelopers(context.Context, *ReadAllDevelopersRequest) (*ReadAllDevelopersResponse, error)
 	CreateDeveloper(context.Context, *CreateDeveloperRequest) (*CreateDeveloperResponse, error)
@@ -1009,9 +1009,9 @@ var _Auth_serviceDesc = grpc.ServiceDesc{
 	Metadata: "rpc/pkg/proto/auth.proto",
 }
 
-func init() { proto.RegisterFile("rpc/pkg/proto/auth.proto", fileDescriptor_auth_5341eea3177600fa) }
+func init() { proto.RegisterFile("rpc/pkg/proto/auth.proto", fileDescriptor_auth_d04ca531c53671f3) }
 
-var fileDescriptor_auth_5341eea3177600fa = []byte{
+var fileDescriptor_auth_d04ca531c53671f3 = []byte{
 	// 590 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x95, 0x5f, 0x6f, 0xd3, 0x3c,
 	0x14, 0xc6, 0x97, 0x34, 0xeb, 0xfb, 0xf6, 0x8c, 0x6d, 0x60, 0x95, 0x36, 0x8d, 0x90, 0x28, 0x1e,

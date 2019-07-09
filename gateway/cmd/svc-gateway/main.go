@@ -2,14 +2,24 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"github.com/bukhavtsov/jwt-auth-app/gateway-server/pkg/proto"
-	"github.com/bukhavtsov/restful-app/pkg/proto"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
+	"github.com/bukhavtsov/jwt-auth-app/gateway/middleware"
 	"log"
 	"net"
+	"os"
+
+	serverProto "github.com/bukhavtsov/jwt-auth-app/gateway/pkg/proto"
+	authProto "github.com/bukhavtsov/jwt-auth-app/rpc/pkg/proto"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
+
+var addr string
+var rpc string
+
+func init() {
+	addr = os.Getenv("listen")
+	rpc = os.Getenv("rpc")
+}
 
 type server struct {
 	client authProto.AuthClient
@@ -20,6 +30,7 @@ func (s *server) ReadAllDevelopers(ctx context.Context, req *serverProto.ReadAll
 	authResp, err := s.client.ReadAllDevelopers(ctx, &authReq)
 	if err != nil {
 		log.Println(err)
+		return nil, err
 	}
 	var respDevelopers []*serverProto.Developer
 	for _, currentDev := range authResp.Developers {
@@ -46,6 +57,7 @@ func (s *server) CreateDeveloper(ctx context.Context, req *serverProto.CreateDev
 	authResp, err := s.client.CreateDeveloper(ctx, &authReq)
 	if err != nil {
 		log.Println(err)
+		return nil, err
 	}
 	return &serverProto.CreateDeveloperResponse{Id: authResp.Id}, nil
 }
@@ -55,6 +67,7 @@ func (s *server) ReadDeveloper(ctx context.Context, req *serverProto.ReadDevelop
 	authResp, err := s.client.ReadDeveloper(ctx, &authReq)
 	if err != nil {
 		log.Println(err)
+		return nil, err
 	}
 	respDeveloper := &serverProto.Developer{
 		Id:           authResp.Developer.Id,
@@ -79,6 +92,7 @@ func (s *server) UpdateDeveloper(ctx context.Context, req *serverProto.UpdateDev
 	authResp, err := s.client.UpdateDeveloper(ctx, &authReq)
 	if err != nil {
 		log.Println(err)
+		return nil, err
 	}
 	respDeveloper := &serverProto.Developer{
 		Id:           authResp.Developer.Id,
@@ -96,6 +110,7 @@ func (s *server) DeleteDeveloper(ctx context.Context, req *serverProto.DeleteDev
 	_, err := s.client.DeleteDeveloper(ctx, &authReq)
 	if err != nil {
 		log.Println(err)
+		return nil, err
 	}
 	return &serverProto.DeleteDeveloperResponse{}, nil
 }
@@ -108,6 +123,7 @@ func (s *server) SignIn(ctx context.Context, req *serverProto.SignInRequest) (*s
 	authResp, err := s.client.SignIn(ctx, &authReq)
 	if err != nil {
 		log.Println(err)
+		return nil, err
 	}
 	return &serverProto.SignInResponse{RefreshToken: authResp.RefreshToken, AccessToken: authResp.AccessToken}, nil
 }
@@ -127,25 +143,31 @@ func (s *server) SignUp(ctx context.Context, req *serverProto.SignUpRequest) (*s
 	authResp, err := s.client.SignUp(ctx, &authReq)
 	if err != nil {
 		log.Println(err)
+		return nil, err
 	}
 	return &serverProto.SignUpResponse{RefreshToken: authResp.RefreshToken, AccessToken: authResp.AccessToken}, nil
 }
 
 func main() {
-	listener, err := net.Listen("tcp", ":2020")
+	listener, err := net.Listen("tcp", addr)
 	if err != nil {
 		log.Fatal(err)
 	}
 	srv := grpc.NewServer()
-	cc, err := grpc.Dial(":8080", grpc.WithInsecure())
+	cc, err := grpc.Dial(rpc, grpc.WithInsecure())
 	if err != nil {
 		log.Fatal(err)
 	}
 	client := authProto.NewAuthClient(cc)
 	serverProto.RegisterRestAppServer(srv, &server{client})
 	reflection.Register(srv)
-	fmt.Println("server")
+	log.Println("listen:", addr)
+	log.Println("call:", rpc)
 	if e := srv.Serve(listener); e != nil {
 		log.Fatal(err)
 	}
+}
+
+func withServerUnaryInterceptor() grpc.ServerOption {
+	return grpc.UnaryInterceptor(middleware.ServerInterceptor)
 }

@@ -12,6 +12,7 @@ import (
 	"time"
 )
 
+// TODO: Resolve
 const (
 	secretKeyAccess  = "eXamp1eK3yACceS$"
 	secretKeyRefresh = "r3Fr3S4eXamp1eK3y"
@@ -19,11 +20,13 @@ const (
 	refreshTokenName = "refresh_token"
 	accessTokenName  = "access_token"
 
-	engine   = "postgres"
-	username = "postgres"
-	password = "root"
-	name     = "restful_app"
+	addr     = "postgres"
 	port     = "5432"
+	user     = "postgres"
+	dbname   = "postgres"
+	password = "root"
+	sslmode  = "disable"
+	host     = "db-rpc"
 )
 
 type jti struct {
@@ -71,6 +74,28 @@ func VerifyPermission(endPoint func(w http.ResponseWriter, r *http.Request)) htt
 	})
 }
 
+// TODO: TEST
+func Validate(accessToken, refreshToken string) (*string, error) {
+	if isVerifiedAccess(accessToken) {
+		return nil, nil
+	}
+	if isVerifiedRefresh(refreshToken) {
+		user, err := getUser(refreshToken, secretKeyRefresh)
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
+		updatedAccess, err := getUpdatedAccess(*user)
+		if err != nil {
+			fmt.Println("accessCookie token :", err)
+			return nil, err
+		}
+
+		return &updatedAccess, nil
+	}
+	return nil, nil
+}
+
 func isVerifiedAccess(access string) bool {
 	if !isValidTime(access, secretKeyAccess) {
 		log.Println("access token time is over")
@@ -86,7 +111,7 @@ func isVerifiedAccess(access string) bool {
 		log.Println(err)
 		return false
 	}
-	connection := db.GetConnection(engine, username, password, name)
+	connection := db.GetConnection(host, port, user, dbname, password, sslmode)
 	user, err := data.NewUserData(connection).GetById(jti.Id) //how to make this method without db connection
 	defer connection.Close()
 	if err != nil {
@@ -131,7 +156,7 @@ func getUser(tokenString, secretKeyAccess string) (*data.User, error) {
 		log.Println(err)
 		return nil, err
 	}
-	connection := db.GetConnection(engine, username, password, name)
+	connection := db.GetConnection(host, port, user, dbname, password, sslmode)
 	user, err := data.NewUserData(connection).GetById(jti.Id)
 	defer connection.Close()
 	if err != nil {
