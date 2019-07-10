@@ -11,18 +11,37 @@ import (
 	"os"
 )
 
-var addr string
-var svcGateway string
+var gwAddr string
+var svcGWAddr string
 
 func init() {
-	addr = os.Getenv("listen")
-	svcGateway = os.Getenv("svc-gateway")
+	gwAddr = os.Getenv("listen")
+	svcGWAddr = os.Getenv("svc-gateway")
+}
+
+func isEmptyAddr() bool {
+	if gwAddr == "" || svcGWAddr == "" {
+		return true
+	}
+	return false
+}
+
+func getDefaultValues() {
+	gwAddr = "127.0.0.1:8081"
+	svcGWAddr = "127.0.0.1:2020"
+}
+
+func emptyEnvMessage() {
+	log.Println("env variables not found")
+	log.Println("default addrs have been setted")
+	log.Println("gateway:", gwAddr)
+	log.Println("svc-gateway:", svcGWAddr)
 }
 
 // TODO: unary interceptor
 func HTTPProxy(proxyAddr string, serviceAddr string) {
-	log.Println("gateway work in:", addr)
-	log.Println("svc-gateway work in:", svcGateway)
+	log.Println("gateway work in:", gwAddr)
+	log.Println("svc-gateway work in:", svcGWAddr)
 	connGRPC, err := grpc.Dial(serviceAddr, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalln("failed to connect to GRPC ", err)
@@ -40,5 +59,9 @@ func HTTPProxy(proxyAddr string, serviceAddr string) {
 }
 
 func main() {
-	HTTPProxy(addr, svcGateway)
+	if isEmptyAddr() {
+		getDefaultValues()
+		emptyEnvMessage()
+	}
+	HTTPProxy(gwAddr, svcGWAddr)
 }

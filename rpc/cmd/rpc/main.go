@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net"
 	"os"
 
@@ -13,7 +14,7 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var addr string
+var rpcAddr string
 var host string
 var port string
 var user string
@@ -22,7 +23,7 @@ var password string
 var sslmode string
 
 func init() {
-	addr = os.Getenv("listen")
+	rpcAddr = os.Getenv("listen")
 	port = os.Getenv("database.port")
 	user = os.Getenv("database.user")
 	dbname = os.Getenv("database.name")
@@ -31,8 +32,60 @@ func init() {
 	host = os.Getenv("database.host")
 }
 
+func isEmptyAddr() bool {
+	if rpcAddr == "" {
+		return true
+	}
+	return false
+}
+
+func isEmptyDBAddr() bool {
+	if host == "" || port == "" || user == "" || dbname == "" || password == "" || sslmode == "" {
+		return true
+	}
+	return false
+}
+
+func getDefaultAddr() {
+	rpcAddr = "127.0.0.1:8080"
+}
+
+func getDefaultDBAddr() {
+	host = "localhost"
+	port = "5432"
+	user = "postgres"
+	dbname = "postgres"
+	password = "root"
+	sslmode = "disable"
+}
+
+func emptyEnvMessage() {
+	log.Println("env variables are not found")
+	log.Println("default address has been setted")
+	log.Println("rpc addr:", rpcAddr)
+}
+
+func emptyEnvDBMessage() {
+	log.Println("env db variables are not found")
+	log.Println("default db address has been setted")
+	log.Println("host:", host)
+	log.Println("port:", port)
+	log.Println("user:", user)
+	log.Println("dbname:", dbname)
+	log.Println("password:", password)
+	log.Println("sslmode:", sslmode)
+}
+
 func main() {
-	listener, err := net.Listen("tcp", addr)
+	if isEmptyAddr() {
+		getDefaultAddr()
+		emptyEnvMessage()
+	}
+	if isEmptyDBAddr() {
+		getDefaultDBAddr()
+		emptyEnvDBMessage()
+	}
+	listener, err := net.Listen("tcp", rpcAddr)
 	if err != nil {
 		panic(err)
 	}

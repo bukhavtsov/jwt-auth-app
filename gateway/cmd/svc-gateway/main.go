@@ -13,12 +13,31 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var addr string
-var rpc string
+var svcGWAddr string
+var rpcAddr string
 
 func init() {
-	addr = os.Getenv("listen")
-	rpc = os.Getenv("rpc")
+	svcGWAddr = os.Getenv("listen")
+	rpcAddr = os.Getenv("rpc")
+}
+
+func isEmptyAddr() bool {
+	if svcGWAddr == "" || rpcAddr == "" {
+		return true
+	}
+	return false
+}
+
+func getDefaultValues() {
+	svcGWAddr = ":2020"
+	rpcAddr = "127.0.0.1:8080"
+}
+
+func emptyEnvMessage() {
+	log.Println("env variables not found")
+	log.Println("default addrs have been setted")
+	log.Println("svc-gateway addrs:", svcGWAddr)
+	log.Println("rpc addr:", rpcAddr)
 }
 
 type server struct {
@@ -149,20 +168,24 @@ func (s *server) SignUp(ctx context.Context, req *serverProto.SignUpRequest) (*s
 }
 
 func main() {
-	listener, err := net.Listen("tcp", addr)
+	if isEmptyAddr() {
+		getDefaultValues()
+		emptyEnvMessage()
+	}
+	listener, err := net.Listen("tcp", svcGWAddr)
 	if err != nil {
 		log.Fatal(err)
 	}
 	srv := grpc.NewServer()
-	cc, err := grpc.Dial(rpc, grpc.WithInsecure())
+	cc, err := grpc.Dial(rpcAddr, grpc.WithInsecure())
 	if err != nil {
 		log.Fatal(err)
 	}
 	client := authProto.NewAuthClient(cc)
 	serverProto.RegisterRestAppServer(srv, &server{client})
 	reflection.Register(srv)
-	log.Println("listen:", addr)
-	log.Println("call:", rpc)
+	log.Println("listen:", svcGWAddr)
+	log.Println("call:", rpcAddr)
 	if e := srv.Serve(listener); e != nil {
 		log.Fatal(err)
 	}
