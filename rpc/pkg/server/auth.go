@@ -98,6 +98,7 @@ func (s server) DeleteDeveloper(ctx context.Context, req *authProto.DeleteDevelo
 
 func (s server) SignIn(ctx context.Context, req *authProto.SignInRequest) (*authProto.SignInResponse, error) {
 	token, err := s.auth.SingIn(req.Login, req.Password)
+	log.Println("token is: ", token)
 	if err != nil {
 		log.Println(err)
 		return nil, err

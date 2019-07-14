@@ -2,11 +2,7 @@ package middleware
 
 import (
 	"context"
-	"github.com/bukhavtsov/jwt-auth-app/rpc/pkg/jwt"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/status"
 	"log"
 	"time"
 )
@@ -17,6 +13,7 @@ func ServerInterceptor(ctx context.Context,
 	handler grpc.UnaryHandler) (interface{}, error) {
 	start := time.Now()
 	// Skip authorize when GetJWT is requested
+	log.Println("hello from middleware")
 	if info.FullMethod != "/proto.EventStoreService/GetJWT" {
 		if err := authorize(ctx); err != nil {
 			return nil, err
@@ -35,6 +32,7 @@ func ServerInterceptor(ctx context.Context,
 }
 
 func authorize(ctx context.Context) error {
+/*	log.Println("i'm in method authorize!")
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return status.Errorf(codes.InvalidArgument, "Retrieving metadata is failed")
@@ -44,10 +42,8 @@ func authorize(ctx context.Context) error {
 	if !ok {
 		return status.Errorf(codes.Unauthenticated, "Authorization token is not supplied")
 	}
-	refreshHeader, ok := md["refreshToken"]
-	if !ok {
+	refreshHeader, _ := md["refreshToken"]
 
-	}
 	accessToken := accessHeader[0]
 	refreshToken := refreshHeader[0]
 	updatedAccess, err := jwt.Validate(accessToken, refreshToken)
@@ -56,6 +52,6 @@ func authorize(ctx context.Context) error {
 	}
 	if updatedAccess != nil {
 		md.Set("accessToken", *updatedAccess)
-	}
+	}*/
 	return nil
 }

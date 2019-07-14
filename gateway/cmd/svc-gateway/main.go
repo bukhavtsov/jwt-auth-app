@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"github.com/bukhavtsov/jwt-auth-app/gateway/middleware"
+	"google.golang.org/grpc/metadata"
 	"log"
 	"net"
 	"os"
@@ -135,6 +135,7 @@ func (s *server) DeleteDeveloper(ctx context.Context, req *serverProto.DeleteDev
 }
 
 func (s *server) SignIn(ctx context.Context, req *serverProto.SignInRequest) (*serverProto.SignInResponse, error) {
+	log.Println(metadata.FromIncomingContext(ctx))
 	authReq := authProto.SignInRequest{
 		Login:    req.Login,
 		Password: req.Password,
@@ -176,6 +177,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+//withServerUnaryInterceptor()
 	srv := grpc.NewServer()
 	cc, err := grpc.Dial(rpcAddr, grpc.WithInsecure())
 	if err != nil {
@@ -191,6 +193,7 @@ func main() {
 	}
 }
 
-func withServerUnaryInterceptor() grpc.ServerOption {
+/*func withServerUnaryInterceptor() grpc.ServerOption {
 	return grpc.UnaryInterceptor(middleware.ServerInterceptor)
 }
+*/

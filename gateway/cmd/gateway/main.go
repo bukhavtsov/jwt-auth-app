@@ -1,14 +1,16 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	pb "github.com/bukhavtsov/jwt-auth-app/gateway/pkg/proto"
+	"github.com/bukhavtsov/jwt-auth-app/rpc/pkg/jwt"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"log"
 	"net/http"
 	"os"
+	"strings"
 )
 
 var gwAddr string
@@ -42,7 +44,7 @@ func emptyEnvMessage() {
 func HTTPProxy(proxyAddr string, serviceAddr string) {
 	log.Println("gateway work in:", gwAddr)
 	log.Println("svc-gateway work in:", svcGWAddr)
-	connGRPC, err := grpc.Dial(serviceAddr, grpc.WithInsecure())
+	connGRPC, err := grpc.Dial(serviceAddr, grpc.WithInsecure(), )
 	if err != nil {
 		log.Fatalln("failed to connect to GRPC ", err)
 	}
@@ -53,7 +55,7 @@ func HTTPProxy(proxyAddr string, serviceAddr string) {
 		log.Fatalln("failed to start HTTP server", err)
 	}
 	mux := http.NewServeMux()
-	mux.Handle("/", gatewayConn)
+	mux.Handle("/", authHandler(gatewayConn))
 	fmt.Println("gateway")
 	log.Fatalln(http.ListenAndServe(proxyAddr, mux))
 }
@@ -64,4 +66,25 @@ func main() {
 		emptyEnvMessage()
 	}
 	HTTPProxy(gwAddr, svcGWAddr)
+}
+
+func authHandler(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Println(r.RequestURI)
+		signUpReq := r.RequestURI == "/api/v1/signup" && r.Method == "POST"
+		signInReq := strings.Contains(r.RequestURI, "/api/v1/signin/") && r.Method == "GET"
+		if !signUpReq && !signInReq {
+			accessToken := r.Header.Get("accessToken")
+			refreshToken := r.Header.Get("refreshToken")
+			err := jwt.Validate(&accessToken, &refreshToken)
+			if err != nil {
+				log.Println("tokens are not found")
+				w.WriteHeader(http.StatusUnauthorized)
+				w.Write([]byte("tokens are not found"))
+				return
+			}
+			w.Header().Set("accessToken", accessToken)
+		}
+		h.ServeHTTP(w, r)
+	})
 }

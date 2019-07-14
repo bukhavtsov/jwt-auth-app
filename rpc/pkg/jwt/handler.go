@@ -3,13 +3,14 @@ package jwt
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/bukhavtsov/jwt-auth-app/devops/db"
-	"github.com/bukhavtsov/jwt-auth-app/rpc/pkg/data"
-	"github.com/dgrijalva/jwt-go"
 	"log"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/bukhavtsov/jwt-auth-app/devops/db"
+	"github.com/bukhavtsov/jwt-auth-app/rpc/pkg/data"
+	"github.com/dgrijalva/jwt-go"
 )
 
 // TODO: Resolve
@@ -20,18 +21,17 @@ const (
 	refreshTokenName = "refresh_token"
 	accessTokenName  = "access_token"
 
-	addr     = "postgres"
+	host     = "localhost"
 	port     = "5432"
 	user     = "postgres"
 	dbname   = "postgres"
 	password = "root"
 	sslmode  = "disable"
-	host     = "db-rpc"
 )
 
 type jti struct {
-	Id   int64  `json:"Id"`
-	Role string `json:"Role"`
+	Login string `json:"login"`
+	Admin bool   `json:"admin"`
 }
 
 func parse(tokenString, secretKey string) (*jwt.Token, error) {
@@ -63,7 +63,7 @@ func VerifyPermission(endPoint func(w http.ResponseWriter, r *http.Request)) htt
 			}
 			updatedAccess, err := getUpdatedAccess(*user)
 			if err != nil {
-				fmt.Println("accessCookie token :", err)
+				log.Println("accessCookie token :", err)
 				return
 			}
 			http.SetCookie(w, &http.Cookie{Name: accessTokenName, Value: updatedAccess})
@@ -75,25 +75,25 @@ func VerifyPermission(endPoint func(w http.ResponseWriter, r *http.Request)) htt
 }
 
 // TODO: TEST
-func Validate(accessToken, refreshToken string) (*string, error) {
-	if isVerifiedAccess(accessToken) {
-		return nil, nil
+func Validate(accessToken, refreshToken *string) error {
+	if isVerifiedAccess(*accessToken) {
+		return nil
 	}
-	if isVerifiedRefresh(refreshToken) {
-		user, err := getUser(refreshToken, secretKeyRefresh)
+	if isVerifiedRefresh(*refreshToken) {
+		user, err := getUser(*refreshToken, secretKeyRefresh)
 		if err != nil {
 			log.Println(err)
-			return nil, err
+			return err
 		}
 		updatedAccess, err := getUpdatedAccess(*user)
 		if err != nil {
-			fmt.Println("accessCookie token :", err)
-			return nil, err
+			log.Println("access token :", err)
+			return err
 		}
-
-		return &updatedAccess, nil
+		accessToken = &updatedAccess
+		return nil
 	}
-	return nil, nil
+	return jwt.NewValidationError("access and refresh tokens are not valid", 413)
 }
 
 func isVerifiedAccess(access string) bool {
@@ -112,14 +112,14 @@ func isVerifiedAccess(access string) bool {
 		return false
 	}
 	connection := db.GetConnection(host, port, user, dbname, password, sslmode)
-	user, err := data.NewUserData(connection).GetById(jti.Id) //how to make this method without db connection
+	user, err := data.NewUserData(connection).GetByLogin(jti.Login) //how to make this method without db connection
 	defer connection.Close()
 	if err != nil {
 		log.Println("user hasn't been found:", err)
 		return false
 	}
-	if user.Role != jti.Role {
-		log.Println(err)
+	if user.Login != jti.Login {
+		log.Println("user has different login")
 		return false
 	}
 	return true
@@ -128,7 +128,7 @@ func isVerifiedAccess(access string) bool {
 func getUpdatedAccess(user data.User) (access string, err error) {
 	access, err = GenerateAccess(user)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 	return
 }
@@ -157,14 +157,14 @@ func getUser(tokenString, secretKeyAccess string) (*data.User, error) {
 		return nil, err
 	}
 	connection := db.GetConnection(host, port, user, dbname, password, sslmode)
-	user, err := data.NewUserData(connection).GetById(jti.Id)
+	user, err := data.NewUserData(connection).GetByLogin(jti.Login)
 	defer connection.Close()
 	if err != nil {
 		log.Println("user hasn't been found:", err)
 		return nil, err
 	}
-	if user.Role != jti.Role {
-		log.Println("user has different role")
+	if user.Login != jti.Login {
+		log.Println("user has different login")
 		return nil, err
 	}
 	return user, err
@@ -180,7 +180,7 @@ func isValidTime(tokenString, secretKey string) bool {
 		expString := fmt.Sprintf("%f", claims["exp"])
 		exp, err := strconv.ParseFloat(expString, 64)
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 			return false
 		}
 		now := float64(time.Now().Unix())
@@ -205,7 +205,8 @@ func GetJTI(token *jwt.Token) (*jti, error) {
 }
 
 func GenerateAccess(user data.User) (tokenString string, err error) {
-	jti, err := json.Marshal(&jti{user.Id, user.Role})
+	admin := user.Role == "admin"
+	jti, err := json.Marshal(&jti{user.Login, admin})
 	if err != nil {
 		return "", err
 	}
@@ -223,7 +224,8 @@ func GenerateAccess(user data.User) (tokenString string, err error) {
 }
 
 func GenerateRefresh(user data.User) (tokenString string, err error) {
-	jti, err := json.Marshal(&jti{user.Id, user.Role})
+	admin := user.Role == "admin"
+	jti, err := json.Marshal(&jti{user.Login, admin})
 	if err != nil {
 		return "", err
 	}
@@ -235,6 +237,7 @@ func GenerateRefresh(user data.User) (tokenString string, err error) {
 	rawToken := jwt.NewWithClaims(jwt.SigningMethodHS512, claims)
 	token, err := rawToken.SignedString([]byte(secretKeyRefresh))
 	if err != nil {
+		log.Println("GenerateRefresh error")
 		return "", err
 	}
 	return token, nil
